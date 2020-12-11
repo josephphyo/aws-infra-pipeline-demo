@@ -109,13 +109,13 @@ The following outputs are exported:
 
 ### natgateway\_public\_ip
 
-Description: n/a
+Description: Nat gateway public ip
 
 ### private\_cidr
 
-Description: n/a
+Description: Private Subnets
 
 ### public\_cidr
 
-Description: n/a
+Description: Public Subnets
 
