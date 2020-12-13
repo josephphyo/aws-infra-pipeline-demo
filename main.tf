@@ -7,6 +7,10 @@
 ## https://github.com/terraform-aws-modules/terraform-aws-ec2-instance
 ## https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/latest
 
+resource "random_pet" "this" {
+  length = 2
+}
+
 ## VPC MODULE (Build aws vpc with private,public subnet with nat gateway)
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
@@ -25,29 +29,32 @@ module "vpc" {
 
 
   tags = {
-    Name        = "tf-vpc-demo"
+    Name        = "vpc-demo"
     Environment = "demo"
+    Owner       = "managed_by_terraform"
   }
 }
 
-## AWS KEY_PAIR MODULE
+## KEY_PAIR MODULE FROM HASHICORP
 resource "tls_private_key" "this" {
   algorithm = "RSA"
 }
 
 resource "local_file" "private_key" {
-  content  = tls_private_key.this.private_key_pem
-  filename = join(".", [var.key_name, "pem"]) ## Generate PEM Key to Local File
+  content         = tls_private_key.this.private_key_pem
+  filename        = join(".", [random_pet.this.id, "pem"]) ## Generate PEM Key to Local File
+  file_permission = "0600"
 }
 
 module "key_pair" {
   source = "terraform-aws-modules/key-pair/aws"
 
-  key_name   = var.key_name ### Keys are not using anywhere.This is only for testing purpose
+  key_name   = random_pet.this.id
   public_key = tls_private_key.this.public_key_openssh
   tags = {
-    Name        = "tf-ec2-keypair"
+    Name        = "ec2-keypair"
     Environment = "demo"
+    Owner       = "managed_by_terraform"
   }
 }
 
@@ -61,8 +68,9 @@ resource "aws_instance" "webserver" {
   vpc_security_group_ids = [module.web_service_sg.this_security_group_id]
 
   tags = {
-    Name        = "tf-ec2-${count.index + 1}"
-    Environment = "demo-${count.index + 1}"
+    Name        = format("ec2-demon%s", format("%0d", count.index + 1))
+    Environment = "demo"
+    Owner       = "managed_by_terraform"
   }
 }
 
@@ -114,4 +122,9 @@ module "web_service_sg" {
       cidr_blocks = "0.0.0.0/0"
     },
   ]
+
+  tags = {
+    Environment = "demo"
+    Owner       = "managed_by_terraform"
+  }
 }
