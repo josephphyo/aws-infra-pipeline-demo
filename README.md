@@ -6,6 +6,8 @@ The following requirements are needed by this module:
 
 - aws (~> 3.20.0)
 
+- local (~> 2.0.0)
+
 - tls (~> 3.0.0)
 
 ## Providers
@@ -13,6 +15,8 @@ The following requirements are needed by this module:
 The following providers are used by this module:
 
 - aws (~> 3.20.0)
+
+- local (~> 2.0.0)
 
 - tls (~> 3.0.0)
 
