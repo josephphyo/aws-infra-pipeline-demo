@@ -6,9 +6,15 @@ The following requirements are needed by this module:
 
 - aws (~> 3.20.0)
 
+- tls (~> 3.0.0)
+
 ## Providers
 
-No provider.
+The following providers are used by this module:
+
+- aws (~> 3.20.0)
+
+- tls (~> 3.0.0)
 
 ## Required Inputs
 
@@ -41,6 +47,22 @@ Type: `string`
 
 Default: `"192.168.0.0/16"`
 
+### eip\_vpc
+
+Description: n/a
+
+Type: `bool`
+
+Default: `true`
+
+### instance\_type
+
+Description: n/a
+
+Type: `string`
+
+Default: `"t3.micro"`
+
 ### is\_enable\_natgw
 
 Description: n/a
@@ -64,6 +86,14 @@ Description: n/a
 Type: `bool`
 
 Default: `true`
+
+### key\_name
+
+Description: n/a
+
+Type: `string`
+
+Default: `"demo-key"`
 
 ### name
 
@@ -99,13 +129,22 @@ Default:
 ```json
 [
   "192.168.3.0/24",
-  "192.168.4.0/24"
+  "192.168.4.0/24",
+  "192.168.5.0/24"
 ]
 ```
 
 ## Outputs
 
 The following outputs are exported:
+
+### eip\_attached\_instance
+
+Description: EIP Attached Instance ID
+
+### key\_name
+
+Description: Ec2 Pem Key Name
 
 ### natgateway\_public\_ip
 
