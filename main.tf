@@ -34,12 +34,17 @@ module "vpc" {
 resource "tls_private_key" "this" {
   algorithm = "RSA"
 }
+
+resource "local_file" "private_key" {
+  content  = tls_private_key.this.private_key_pem
+  filename = join(".", [var.key_name, "pem"]) ## Generate PEM Key to Local File
+}
+
 module "key_pair" {
   source = "terraform-aws-modules/key-pair/aws"
 
   key_name   = var.key_name ### Keys are not using anywhere.This is only for testing purpose
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC5khFNg/jLsERa6kNlZSNe4wWLdGA0cweS+sbODUHydHzYGvLjKOnNFbJES1mYgjlgersF7TxE+6to7qsJ3MJgGHkf9ylTDMAmPvHm3EEbu4rJSoQhwOi8QRtz0ebnxV99COEfh6OSW3mCyLSGx5QtLJVuiYTW+QOU7tn81k17ks16+SKd0BWOpKTB/QOhLgK8ya3FqGosavb+RDzf3zxsep5TGADSLAafaP5a/Q/irV/Ualcc+yJRSgks4nAKh3qjPVXB7cEhYXpZVOk/dpJ6z2UFhtPgb3gvLyXF/KkssTMY0SZrevCC0gbI6Fn7IiLbdt0+kqv+6I0Fx4hXX9KqzFRiFYtkDy62/AS/GhGQlZUJqmbxjjV33j4oAhOYllBFljtAAs5WthvIvvIX7zLuf4mIREK+EZKihkYunYK+xc9RaaC1u77IN5+Z0Bc5zNm94jWimA292X8jge3h/DyQcnqyUGjxPb9dac23NqscKXFHskroIB4XOiBo1ESSAW0= demo@blahblah.com"
-
+  public_key = tls_private_key.this.public_key_openssh
   tags = {
     Name        = "tf-ec2-keypair"
     Environment = "demo"
