@@ -39,11 +39,6 @@ variable "is_one_natgw_per_az" {
   default = false
 }
 
-variable "key_name" {
-  type    = string
-  default = "demo-key"
-}
-
 variable "instance_type" {
   type    = string
   default = "t3.micro"
