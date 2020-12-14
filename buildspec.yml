@@ -3,20 +3,15 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.8
+      python: 3.7
     commands:
-      - "cd /usr/bin"
-      - "curl -O https://releases.hashicorp.com/terraform/0.14.2/terraform_0.14.2_linux_amd64.zip"
-      - "unzip terraform_0.14.2_linux_amd64.zip"
-
+      - tf_version=$TERRAFORM_VERSION
+      - wget https://releases.hashicorp.com/terraform/"$TERRAFORM_VERSION"/terraform_"$TERRAFORM_VERSION"_linux_amd64.zip
+      - unzip terraform_"$TERRAFORM_VERSION"_linux_amd64.zip
+      - mv terraform /usr/local/bin/
   build:
     commands:
-      - cd "$CODEBUILD_SRC_DIR"
-      - terraform init
-      - terraform apply -auto-approve
-
-  post_build:
-    commands:
-      - echo "Terraform completed on `date`"
-
-      
+      - terraform --version
+      - terraform init -input=false
+      - terraform validate
+      - terraform plan -lock=false -input=false
