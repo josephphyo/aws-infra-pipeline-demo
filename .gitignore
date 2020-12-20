@@ -35,6 +35,5 @@ override.tf.json
 #
 #
 .DS_Store
-.pre-commit-config.yaml
 .terraform.lock.hcl
 demo-key.pem
