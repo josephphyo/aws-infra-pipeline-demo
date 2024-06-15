@@ -14,7 +14,7 @@ resource "random_pet" "this" {
 ## VPC MODULE (Build aws vpc with private,public subnet with nat gateway)
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "2.64.0"
+  version = "2.78.0"
 
   name = var.name
   cidr = var.cidr
